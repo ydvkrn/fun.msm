@@ -125,9 +125,14 @@
 
         async function loadVideos() {
             try {
-                const response = await fetch('https://raw.githubusercontent.com/ydvkrn/Vid/refs/heads/main/video.json');
+                const response = await fetch('https://raw.githubusercontent.com/ydvkrn/Vid/main/video.json');
                 const data = await response.json();
                 allVideos = data.videos;
+
+                if (!allVideos || allVideos.length === 0) {
+                    videoList.innerHTML = "<p>कोई वीडियो उपलब्ध नहीं है</p>";
+                    return;
+                }
 
                 data.videos.forEach((video, index) => {
                     const videoItem = document.createElement('div');
@@ -149,6 +154,7 @@
                 });
             } catch (error) {
                 console.error('Error loading videos:', error);
+                videoList.innerHTML = "<p>वीडियो लोड करने में समस्या हो रही है</p>";
             }
         }
 
