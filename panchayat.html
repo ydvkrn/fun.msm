@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Media from PixelDrain</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .media-container {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+        }
+        video {
+            width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        p {
+            text-align: center;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="media-container">
+        <video controls preload="auto" poster="https://via.placeholder.com/800x450?text=Loading+Video">
+            <source src="https://pixeldrain.com/api/file/mAPDmKKg" type="video/mp4">
+            <p>Your browser does not support the video tag. <a href="https://pixeldrain.com/u/mAPDmKKg">Download the file</a> instead.</p>
+        </video>
+    </div>
+    <script>
+        // Optional: Log errors for debugging
+        const video = document.querySelector('video');
+        video.addEventListener('error', (e) => {
+            console.error('Video loading error:', e);
+            alert('Error loading video. Try downloading it or hosting it elsewhere.');
+        });
+    </script>
+</body>
+</html>
