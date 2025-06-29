@@ -3,47 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stream Media from PixelDrain</title>
+    <title>Stream Panchayat S04</title>
+    <!-- Video.js CSS (CDN for speed) -->
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet">
     <style>
         body {
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            font-family: sans-serif;
         }
         .media-container {
             max-width: 800px;
             width: 100%;
-            padding: 20px;
+            padding: 10px;
+            text-align: center;
         }
-        video {
+        .video-js {
             width: 100%;
             max-height: 80vh;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: black;
         }
-        p {
-            text-align: center;
-            color: #333;
+        .made-by {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e90ff; /* Blue color for "khaas" feel */
+            margin-bottom: 10px;
+        }
+        .vjs-skip-buttons .vjs-icon-placeholder::before {
+            font-size: 1.5em;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
     <div class="media-container">
-        <video controls preload="auto" poster="https://via.placeholder.com/800x450?text=Loading+Video">
-            <source src="https://pixeldrain.com/api/file/mAPDmKKg" type="video/mp4">
-            <p>Your browser does not support the video tag. <a href="https://pixeldrain.com/u/mAPDmKKg">Download the file</a> instead.</p>
-        </video>
+        <div class="made-by">PANCHAYAT SEASON 04 FULL EPISODE</div>
+        <video id="player" class="video-js vjs-default-skin" controls preload="auto" poster="https://assets.aboutamazon.com/dims4/default/a4c7b1a/2147483647/strip/true/crop/1279x720+0+0/resize/1240x698!/format/webp/quality/90/?url=https%3A%2F%2Famazon-blogs-brightspot.s3.amazonaws.com%2F28%2F27%2F94b1888e4228bab5962c9a649ad4%2Fpanchayat-trailer-lead.jpg"></video>
     </div>
+    <!-- Video.js JavaScript (CDN for speed) -->
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
     <script>
-        // Optional: Log errors for debugging
-        const video = document.querySelector('video');
-        video.addEventListener('error', (e) => {
-            console.error('Video loading error:', e);
-            alert('Error loading video. Try downloading it or hosting it elsewhere.');
+        // Initialize Video.js
+        const player = videojs('player', {
+            fluid: true, // Responsive
+            playbackRates: [0.5, 1, 1.5, 2], // Speed options
+            sources: [{
+                src: 'https://pub-b8852c3a70ae43f096aaa32e5a2b37e5.r2.dev/8dd5c0c7c4c029696696d0a4d1664ba4/Panchayat%20S04%20Ep.01-08%20(2025)%20Hindi%20Completed%20Web%20Series%20HEVC%20720p%20ESub.mkv',
+                type: 'video/mp4' // Try as MP4; MKV may need conversion
+            }],
+            controlBar: {
+                volumePanel: { inline: false },
+                pictureInPictureToggle: true
+            }
+        });
+
+        // Add 10-second skip buttons
+        const Button = videojs.getComponent('Button');
+        const SkipBackward = videojs.extend(Button, {
+            constructor: function() {
+                Button.apply(this, arguments);
+                this.addClass('vjs-skip-backward');
+                this.controlText('Skip Back 10s');
+            },
+            handleClick: function() {
+                player.currentTime(player.currentTime() - 10);
+            },
+            buildCSSClass: function() {
+                return 'vjs-skip-backward vjs-icon-replay-10';
+            }
+        });
+        const SkipForward = videojs.extend(Button, {
+            constructor: function() {
+                Button.apply(this, arguments);
+                this.addClass('vjs-skip-forward');
+                this.controlText('Skip Forward 10s');
+            },
+            handleClick: function() {
+                player.currentTime(player.currentTime() + 10);
+            },
+            buildCSSClass: function() {
+                return 'vjs-skip-forward vjs-icon-forward-10';
+            }
+        });
+
+        videojs.registerComponent('SkipBackward', SkipBackward);
+        videojs.registerComponent('SkipForward', SkipForward);
+        player.getChild('controlBar').addChild('SkipBackward', {}, 0);
+        player.getChild('controlBar').addChild('SkipForward', {}, 2);
+
+        // Error handling
+        player.on('error', () => {
+            const error = player.error();
+            console.error('Video.js Error:', error);
+            alert(`Error: ${error.message}. MKV may not be supported. Please convert to MP4 or use a streaming service.`);
+        });
+        player.on('progress', () => {
+            console.log('Buffering:', player.bufferedPercent());
         });
     </script>
 </body>
