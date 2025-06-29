@@ -43,7 +43,7 @@
 </head>
 <body>
     <div class="media-container">
-        <div class="made-by">PANCHAYAT SEASON 04 FULL EPISODE</div>
+        <div class="made-by">MADE BY MASOOM</div>
         <video id="player" class="video-js vjs-default-skin" controls preload="auto" poster="https://assets.aboutamazon.com/dims4/default/a4c7b1a/2147483647/strip/true/crop/1279x720+0+0/resize/1240x698!/format/webp/quality/90/?url=https%3A%2F%2Famazon-blogs-brightspot.s3.amazonaws.com%2F28%2F27%2F94b1888e4228bab5962c9a649ad4%2Fpanchayat-trailer-lead.jpg"></video>
     </div>
     <!-- Video.js JavaScript (CDN for speed) -->
@@ -91,11 +91,29 @@
                 return 'vjs-skip-forward vjs-icon-forward-10';
             }
         });
-
         videojs.registerComponent('SkipBackward', SkipBackward);
         videojs.registerComponent('SkipForward', SkipForward);
         player.getChild('controlBar').addChild('SkipBackward', {}, 0);
         player.getChild('controlBar').addChild('SkipForward', {}, 2);
+
+        // Auto full-screen and landscape on load
+        player.ready(() => {
+            // Request full-screen
+            if (player.el().requestFullscreen) {
+                player.el().requestFullscreen();
+            } else if (player.el().webkitRequestFullscreen) { // Safari
+                player.el().webkitRequestFullscreen();
+            } else if (player.el().msRequestFullscreen) { // IE
+                player.el().msRequestFullscreen();
+            }
+
+            // Attempt to lock to landscape orientation
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock('landscape').catch(err => {
+                    console.warn('Orientation lock failed:', err);
+                });
+            }
+        });
 
         // Error handling
         player.on('error', () => {
